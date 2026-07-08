@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Invoice, Lead } from "@/api/entities";
-import { Plus, Search, Download, CheckCircle2, Receipt } from "lucide-react";
+import { Plus, Search, Download, CheckCircle2, Receipt, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +13,9 @@ import MarkPaidDialog from "@/components/invoices/MarkPaidDialog";
 import { generateInvoicePDF } from "@/lib/generateInvoicePDF";
 import moment from "moment";
 import { useAuth } from "@/lib/AuthContext";
+import { supabase } from "@/api/supabaseClient";
+import { Link } from "react-router-dom";
+import { Lock } from "lucide-react";
 
 const STATUS_COLORS = {
   Paid: "bg-emerald-100 text-emerald-700",
@@ -48,6 +51,23 @@ export default function Invoices() {
     toast({ title: "Invoice created ✓" });
     loadData();
   };
+  const handleStripePay = async (invoiceId) => {
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: { type: "invoice", invoiceId },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (err) {
+      toast({ title: "Payment failed", description: err.message, variant: "destructive" });
+    }
+  };
+
+
 
   const handleMarkPaid = async (id, paymentDate) => {
     await Invoice.update(id, { status: "Paid", payment_date: paymentDate });
@@ -62,6 +82,24 @@ export default function Invoices() {
   });
 
   if (loading) return <div className="p-8"><SkeletonLoader rows={5} /></div>;
+  if (user?.subscription_plan === "Starter") {
+    return (
+      <div className="max-w-xl mx-auto text-center py-20">
+        <div className="w-16 h-16 rounded-xl bg-[#1C1C1C] flex items-center justify-center mx-auto mb-5">
+          <Lock className="w-7 h-7 text-[#C9A227]" />
+        </div>
+        <h1 className="text-2xl font-heading font-bold text-[#1C1C1C]">Invoicing is a Professional feature</h1>
+        <p className="text-gray-500 mt-2">
+          Upgrade to the Professional or Enterprise plan to create invoices, collect payments, and generate PDFs.
+        </p>
+        <Link to="/choose-plan">
+          <Button className="bg-[#C9A227] hover:bg-[#b08e1f] text-white mt-6">
+            Upgrade Plan
+          </Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -131,9 +169,20 @@ export default function Invoices() {
                         <Download className="w-4 h-4" />
                       </Button>
                       {inv.status !== "Paid" && (
-                        <Button variant="outline" size="icon" onClick={() => setPayInvoice(inv)} title="Mark as Paid" className="text-emerald-600">
-                          <CheckCircle2 className="w-4 h-4" />
-                        </Button>
+                        <>
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handleStripePay(inv.id)}
+                            title="Pay with Stripe"
+                            className="text-indigo-600"
+                          >
+                            <CreditCard className="w-4 h-4" />
+                          </Button>
+                          <Button variant="outline" size="icon" onClick={() => setPayInvoice(inv)} title="Mark as Paid" className="text-emerald-600">
+                            <CheckCircle2 className="w-4 h-4" />
+                          </Button>
+                        </>
                       )}
                     </div>
                   </div>

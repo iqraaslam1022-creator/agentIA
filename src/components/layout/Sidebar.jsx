@@ -37,10 +37,9 @@ export default function Sidebar() {
           end={end}
           onClick={() => setMobileOpen(false)}
           className={({ isActive }) =>
-            `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-              isActive
-                ? "bg-[#C9A227] text-white"
-                : "text-[#D4CFC4] hover:bg-white/10 hover:text-white"
+            `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
+              ? "bg-[#C9A227] text-white"
+              : "text-[#D4CFC4] hover:bg-white/10 hover:text-white"
             }`
           }
         >
@@ -90,7 +89,9 @@ export default function Sidebar() {
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#C9A227] to-[#E8D48B]" />
           <div>
             <p className="text-white font-heading font-bold leading-tight">AgentIA</p>
-            <p className="text-[10px] text-[#9A9488] tracking-widest uppercase">{user?.agency_name || "Real Estate CRM"}</p>
+            <p className="text-[10px] text-[#9A9488] tracking-widest uppercase">
+              {user?.subscription_plan === "Enterprise" && user?.agency_name ? user.agency_name : "Real Estate CRM"}
+            </p>
           </div>
         </div>
         <NavItems />

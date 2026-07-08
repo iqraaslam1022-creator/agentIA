@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserProfile } from "@/api/entities";
+import { supabase } from "@/api/supabaseClient";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Check, Home } from "lucide-react";
 import { motion } from "framer-motion";
 import moment from "moment";
+
 
 const PLANS = [
   { name: "Starter", price: 19, features: ["Up to 50 leads", "Basic pipeline", "Email support"] },
@@ -20,16 +22,20 @@ export default function ChoosePlan() {
 
   const handleSelect = async (plan) => {
     setSelecting(plan);
-    // NOTE: this only records the chosen plan — it does not charge a card.
-    // Wire this up to Stripe Checkout before going live if you want real billing.
-    await UserProfile.update(user.id, {
-      subscription_plan: plan,
-      subscription_status: "active",
-      subscription_end_date: moment().add(30, "days").format("YYYY-MM-DD"),
-    });
-    await checkUserAuth();
-    setSelecting("");
-    navigate("/");
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: { type: "subscription", plan },
+      });
+      if (error) throw error;
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
+      }
+    } catch (err) {
+      alert("Payment setup failed: " + err.message);
+      setSelecting("");
+    }
   };
 
   return (
