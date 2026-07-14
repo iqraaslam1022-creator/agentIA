@@ -1,0 +1,104 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 25% 96%;
+    --foreground: 0 0% 11%;
+    --card: 40 20% 98%;
+    --card-foreground: 0 0% 11%;
+    --popover: 40 20% 98%;
+    --popover-foreground: 0 0% 11%;
+    --primary: 0 0% 11%;
+    --primary-foreground: 40 25% 96%;
+    --secondary: 44 72% 47%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 40 15% 92%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 44 72% 47%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 40 15% 88%;
+    --input: 40 15% 88%;
+    --ring: 44 72% 47%;
+    --chart-1: 44 72% 47%;
+    --chart-2: 0 0% 30%;
+    --chart-3: 40 20% 70%;
+    --chart-4: 44 50% 60%;
+    --chart-5: 0 0% 50%;
+    --radius: 0.5rem;
+    --font-heading: 'Playfair Display', Georgia, serif;
+    --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --sidebar-background: 0 0% 11%;
+    --sidebar-foreground: 40 15% 85%;
+    --sidebar-primary: 44 72% 47%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 18%;
+    --sidebar-accent-foreground: 40 15% 90%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 44 72% 47%;
+    --gold: 44 72% 47%;
+    --gold-light: 44 60% 70%;
+    --charcoal: 0 0% 11%;
+    --cream: 40 25% 96%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Gold shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.gold-shimmer {
+  background: linear-gradient(90deg, #C9A227 0%, #E8D48B 50%, #C9A227 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Skeleton loading */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, hsl(40, 15%, 88%) 0%, hsl(40, 15%, 92%) 50%, hsl(40, 15%, 88%) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.375rem;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(40, 15%, 80%);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(44, 72%, 47%);
+}
