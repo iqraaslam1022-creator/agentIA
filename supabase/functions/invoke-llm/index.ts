@@ -97,7 +97,8 @@ Deno.serve(async (req) => {
                 model: "openai/gpt-oss-120b",
                 messages: [{ role: "user", content: prompt }],
                 temperature: 0.7,
-                max_tokens: 300,
+                max_tokens: 800,
+                reasoning_effort: "low",
             }),
         });
 
@@ -111,7 +112,9 @@ Deno.serve(async (req) => {
             });
         }
 
-        const text = groqData?.choices?.[0]?.message?.content?.trim() ?? "";
+        const text = groqData?.choices?.[0]?.message?.content?.trim()
+            || groqData?.choices?.[0]?.message?.reasoning?.trim()
+            || "";
 
         return new Response(JSON.stringify({ text }), {
             status: 200,
