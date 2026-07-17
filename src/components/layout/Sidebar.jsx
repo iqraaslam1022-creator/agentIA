@@ -89,13 +89,9 @@ export default function Sidebar() {
           <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-[#C9A227] to-[#E8D48B]" />
           <div>
             <p className="text-white font-heading font-bold leading-tight">AgentIA</p>
-<<<<<<< HEAD
-  <p className="text-[10px] text-[#9A9488] tracking-widest uppercase">{user?.agency_name || "Real Estate CRM"}</p>
-=======
             <p className="text-[10px] text-[#9A9488] tracking-widest uppercase">
               {user?.subscription_plan === "Enterprise" && user?.agency_name ? user.agency_name : "Real Estate CRM"}
             </p>
->>>>>>> bc899968ca071fe448cacbf4b8fcbcc243761cd2
           </div >
         </div >
         <NavItems />
