@@ -95,7 +95,21 @@ export default function Leads() {
           <h1 className="text-2xl md:text-3xl font-heading font-bold text-[#1C1C1C]">Leads</h1>
           <p className="text-sm text-gray-500 mt-1">{leads.length} total leads</p>
         </div>
-        <Button onClick={() => { setEditLead(null); setFormOpen(true); }} className="bg-[#C9A227] hover:bg-[#b08e1f] text-white shadow-md hover:shadow-lg transition-all duration-300">
+        <Button
+          onClick={() => {
+            if (user?.subscription_plan === "Starter" && leads.length >= 50) {
+              toast({
+                title: "Lead limit reached",
+                description: "Starter plan allows up to 50 leads. Upgrade to Professional for unlimited leads.",
+                variant: "destructive",
+              });
+              return;
+            }
+            setEditLead(null);
+            setFormOpen(true);
+          }}
+          className="bg-[#C9A227] hover:bg-[#b08e1f] text-white shadow-md hover:shadow-lg transition-all duration-300"
+        >
           <Plus className="w-4 h-4 mr-2" /> Add Lead
         </Button>
       </div>

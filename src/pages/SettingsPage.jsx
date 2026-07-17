@@ -96,9 +96,28 @@ export default function SettingsPage() {
           <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+1 234 567 890" />
         </div>
         <div>
-          <Label>Agency Name</Label>
-          <Input value={form.agency_name} onChange={(e) => setForm({ ...form, agency_name: e.target.value })} placeholder="Your agency name" />
+          <Label className="flex items-center gap-2">
+            Agency Name (Custom Branding)
+            {user?.subscription_plan !== "Enterprise" && (
+              <span className="text-[10px] font-semibold uppercase tracking-wide bg-[#1C1C1C] text-[#C9A227] px-2 py-0.5 rounded-full">
+                Enterprise
+              </span>
+            )}
+          </Label>
+          <Input
+            value={form.agency_name}
+            onChange={(e) => setForm({ ...form, agency_name: e.target.value })}
+            placeholder="Your agency name"
+            disabled={user?.subscription_plan !== "Enterprise"}
+            className={user?.subscription_plan !== "Enterprise" ? "bg-gray-50 cursor-not-allowed" : ""}
+          />
+          {user?.subscription_plan !== "Enterprise" && (
+            <p className="text-xs text-gray-400 mt-1">
+              Upgrade to the Enterprise plan to replace "AgentIA" with your own agency name in the sidebar.
+            </p>
+          )}
         </div>
+
         <div>
           <Label>Default Commission %</Label>
           <Input type="number" step="0.5" value={form.default_commission} onChange={(e) => setForm({ ...form, default_commission: e.target.value })} />

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Check, Home } from "lucide-react";
 import { motion } from "framer-motion";
 
+
 const PLANS = [
   {
     name: "Starter",
