@@ -1,29 +1,25 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Check, Home } from "lucide-react";
 import { motion } from "framer-motion";
-
+import { supabase } from "@/api/supabaseClient";
 
 const PLANS = [
   {
     name: "Starter",
     price: 19,
-    variantEnv: "VITE_LS_STARTER_VARIANT_ID",
     features: ["Up to 50 leads", "Basic pipeline", "Email support"],
   },
   {
     name: "Professional",
     price: 49,
-    variantEnv: "VITE_LS_PROFESSIONAL_VARIANT_ID",
     features: ["Unlimited leads", "Full pipeline & invoicing", "Priority support"],
   },
   {
     name: "Enterprise",
     price: 99,
-    variantEnv: "VITE_LS_ENTERPRISE_VARIANT_ID",
     features: ["Everything in Professional", "Dedicated account manager", "Custom branding"],
   },
 ];
@@ -38,51 +34,19 @@ export default function ChoosePlan() {
     setSelecting(plan.name);
     setError("");
     try {
-      const variantId = import.meta.env[plan.variantEnv];
-      const storeId = import.meta.env.VITE_LS_STORE_ID;
-      const apiKey = import.meta.env.VITE_LS_API_KEY;
+      const { data, error: fnError } = await supabase.functions.invoke(
+        "create-checkout-session",
+        { body: { plan: plan.name } }
+      );
 
-      if (!variantId || !storeId || !apiKey) {
-        throw new Error("Payment configuration missing. Please contact support.");
+      if (fnError) {
+        throw new Error(fnError.message || "Checkout failed");
+      }
+      if (data?.error) {
+        throw new Error(data.error);
       }
 
-      const res = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/vnd.api+json",
-          Accept: "application/vnd.api+json",
-        },
-        body: JSON.stringify({
-          data: {
-            type: "checkouts",
-            attributes: {
-              checkout_data: {
-                email: user?.email || "",
-                custom: {
-                  user_id: user?.id || "",
-                  plan: plan.name,
-                },
-              },
-              product_options: {
-                redirect_url: `${window.location.origin}/`,
-              },
-            },
-            relationships: {
-              store: { data: { type: "stores", id: storeId } },
-              variant: { data: { type: "variants", id: variantId } },
-            },
-          },
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.errors) {
-        throw new Error(data.errors[0]?.detail || "Checkout failed");
-      }
-
-      const checkoutUrl = data.data?.attributes?.url;
+      const checkoutUrl = data?.url;
       if (!checkoutUrl) throw new Error("No checkout URL returned");
 
       window.location.href = checkoutUrl;
