@@ -14,6 +14,7 @@ import CommunicationLogPanel from "@/components/leads/CommunicationLogPanel";
 import SkeletonLoader from "@/components/ui/SkeletonLoader";
 import DeleteConfirmDialog from "@/components/ui/DeleteConfirmDialog";
 import { useAuth } from "@/lib/AuthContext";
+import AIAssistantButton from "@/components/AIAssistantButton";
 
 const STATUS_COLORS = {
   New: "bg-blue-100 text-blue-700",
@@ -209,6 +210,11 @@ export default function Leads() {
                       </a>
                     )}
                   </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-gray-100 flex flex-col sm:flex-row gap-2">
+                  <AIAssistantButton task="follow_up" context={lead} label="AI Follow-up" />
+                  <AIAssistantButton task="lead_summary" context={lead} label="AI Summary" />
                 </div>
               </motion.div>
             ))}
