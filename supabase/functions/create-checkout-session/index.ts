@@ -78,7 +78,7 @@ Deno.serve(async (req) => {
               },
             },
             product_options: {
-              redirect_url: siteUrl ? `${siteUrl}/dashboard` : undefined,
+              redirect_url: siteUrl ? siteUrl : undefined,
             },
           },
           relationships: {
