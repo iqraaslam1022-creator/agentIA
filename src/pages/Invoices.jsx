@@ -13,12 +13,9 @@ import MarkPaidDialog from "@/components/invoices/MarkPaidDialog";
 import { generateInvoicePDF } from "@/lib/generateInvoicePDF";
 import moment from "moment";
 import { useAuth } from "@/lib/AuthContext";
-<<<<<<< HEAD
-=======
 import { supabase } from "@/api/supabaseClient";
 import { Link } from "react-router-dom";
 import { Lock } from "lucide-react";
->>>>>>> bc899968ca071fe448cacbf4b8fcbcc243761cd2
 
 const STATUS_COLORS = {
   Paid: "bg-emerald-100 text-emerald-700",
@@ -54,8 +51,6 @@ export default function Invoices() {
     toast({ title: "Invoice created ✓" });
     loadData();
   };
-<<<<<<< HEAD
-=======
   const handleStripePay = async (invoiceId) => {
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
@@ -73,7 +68,6 @@ export default function Invoices() {
   };
 
 
->>>>>>> bc899968ca071fe448cacbf4b8fcbcc243761cd2
 
   const handleMarkPaid = async (id, paymentDate) => {
     await Invoice.update(id, { status: "Paid", payment_date: paymentDate });
@@ -88,8 +82,6 @@ export default function Invoices() {
   });
 
   if (loading) return <div className="p-8"><SkeletonLoader rows={5} /></div>;
-<<<<<<< HEAD
-=======
   if (user?.subscription_plan === "Starter") {
     return (
       <div className="max-w-xl mx-auto text-center py-20">
@@ -108,7 +100,6 @@ export default function Invoices() {
       </div>
     );
   }
->>>>>>> bc899968ca071fe448cacbf4b8fcbcc243761cd2
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
@@ -178,11 +169,6 @@ export default function Invoices() {
                         <Download className="w-4 h-4" />
                       </Button>
                       {inv.status !== "Paid" && (
-<<<<<<< HEAD
-                        <Button variant="outline" size="icon" onClick={() => setPayInvoice(inv)} title="Mark as Paid" className="text-emerald-600">
-                          <CheckCircle2 className="w-4 h-4" />
-                        </Button>
-=======
                         <>
                           <Button
                             variant="outline"
@@ -197,7 +183,6 @@ export default function Invoices() {
                             <CheckCircle2 className="w-4 h-4" />
                           </Button>
                         </>
->>>>>>> bc899968ca071fe448cacbf4b8fcbcc243761cd2
                       )}
                     </div>
                   </div>
