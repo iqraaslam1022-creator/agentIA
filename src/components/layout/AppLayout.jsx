@@ -8,9 +8,9 @@ import ReminderPopup from "@/components/reminders/ReminderPopup";
 export default function AppLayout() {
   return (
     <FollowUpReminderProvider>
-      <div className="min-h-screen bg-[#F8F6F1]">
+      <div className="min-h-screen bg-[#111111]">
         <Sidebar />
-        <main className="lg:ml-[260px] pt-16 lg:pt-0 min-h-screen">
+        <main className="lg:ml-[240px] pt-16 lg:pt-0 min-h-screen">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}

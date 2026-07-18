@@ -1,17 +1,6 @@
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Users,
-  Building2,
-  KanbanSquare,
-  FileText,
-  Receipt,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-} from "lucide-react";
+import { LayoutDashboard, Users, Building2, KanbanSquare, FileText, Receipt, Settings, LogOut, Menu, X } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
 
 const NAV_ITEMS = [
@@ -26,44 +15,34 @@ const NAV_ITEMS = [
 
 function SidebarFooter({ user, logout }) {
   return (
-    <div className="p-4 border-t border-[#1E4F8C]">
+    <div className="p-4 border-t border-white/8">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-sm font-bold">
+        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white text-sm font-bold">
           {user?.full_name?.charAt(0) || user?.email?.charAt(0) || "U"}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-white truncate">{user?.full_name || "User"}</p>
-          <p className="text-xs text-blue-300 truncate">{user?.email}</p>
+          <p className="text-sm font-medium text-white truncate">{user?.full_name || "Agent"}</p>
+          <p className="text-xs text-white/40 truncate">{user?.email}</p>
         </div>
       </div>
-      <button
-        onClick={() => logout()}
-        className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-blue-300 hover:bg-white/10 hover:text-white transition-colors"
-      >
-        <LogOut className="w-4 h-4" />
-        Sign out
+      <button onClick={() => logout()} className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm text-white/40 hover:bg-white/5 hover:text-white transition-colors">
+        <LogOut className="w-4 h-4" /> Sign out
       </button>
     </div>
   );
 }
 
 const NavItems = ({ setMobileOpen }) => (
-  <nav className="flex-1 px-3 space-y-1 mt-4">
+  <nav className="flex-1 px-2 space-y-0.5 mt-4">
     {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
-      <NavLink
-        key={to}
-        to={to}
-        end={end}
+      <NavLink key={to} to={to} end={end}
         onClick={() => setMobileOpen && setMobileOpen(false)}
         className={({ isActive }) =>
-          `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
-            ? "bg-[#2563EB] text-white shadow-sm"
-            : "text-blue-200 hover:bg-white/10 hover:text-white"
+          `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${isActive ? "bg-white text-black font-semibold" : "text-white/50 hover:bg-white/5 hover:text-white"
           }`
         }
       >
-        <Icon className="w-4 h-4" />
-        {label}
+        <Icon className="w-4 h-4" /> {label}
       </NavLink>
     ))}
   </nav>
@@ -75,50 +54,45 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Mobile top bar */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0F2D6B] flex items-center justify-between px-4 z-40 border-b border-[#1E4F8C]">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2563EB] to-[#60A5FA] flex items-center justify-center">
-            <span className="text-white font-bold text-sm">D</span>
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0A0A0A] flex items-center justify-between px-4 z-40 border-b border-white/8">
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center">
+            <span className="text-black font-bold text-sm">D</span>
           </div>
-          <span className="text-white font-heading font-bold text-lg">DealFlow CRM</span>
+          <span className="text-white font-bold text-base">DealFlow CRM</span>
         </div>
-        <button onClick={() => setMobileOpen(true)} className="text-white">
-          <Menu className="w-6 h-6" />
+        <button onClick={() => setMobileOpen(true)} className="text-white/60 hover:text-white">
+          <Menu className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {mobileOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
-          <div className="w-[260px] bg-[#0F2D6B] flex flex-col h-full">
+          <div className="w-[240px] bg-[#0A0A0A] flex flex-col h-full border-r border-white/8">
             <div className="flex items-center justify-between p-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#2563EB] to-[#60A5FA] flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">D</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-md bg-white flex items-center justify-center">
+                  <span className="text-black font-bold text-sm">D</span>
                 </div>
-                <span className="text-white font-heading font-bold">DealFlow CRM</span>
+                <span className="text-white font-bold">DealFlow CRM</span>
               </div>
-              <button onClick={() => setMobileOpen(false)} className="text-white">
-                <X className="w-5 h-5" />
-              </button>
+              <button onClick={() => setMobileOpen(false)} className="text-white/50"><X className="w-4 h-4" /></button>
             </div>
             <NavItems setMobileOpen={setMobileOpen} />
             <SidebarFooter user={user} logout={logout} />
           </div>
-          <div className="flex-1 bg-black/40" onClick={() => setMobileOpen(false)} />
+          <div className="flex-1 bg-black/60" onClick={() => setMobileOpen(false)} />
         </div>
       )}
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:flex flex-col w-[240px] bg-[#0F2D6B] h-screen fixed left-0 top-0 border-r border-[#1E4F8C]">
-        <div className="flex items-center gap-3 p-5 border-b border-[#1E4F8C]">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#2563EB] to-[#60A5FA] flex items-center justify-center shadow-lg">
-            <span className="text-white font-bold">D</span>
+      <div className="hidden lg:flex flex-col w-[240px] bg-[#0A0A0A] h-screen fixed left-0 top-0 border-r border-white/8">
+        <div className="flex items-center gap-2.5 p-5 border-b border-white/8">
+          <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow">
+            <span className="text-black font-bold">D</span>
           </div>
           <div>
-            <span className="text-white font-heading font-bold text-base leading-tight block">DealFlow</span>
-            <span className="text-blue-300 text-xs">CRM Platform</span>
+            <span className="text-white font-bold text-base leading-tight block">DealFlow</span>
+            <span className="text-white/30 text-xs">CRM Platform</span>
           </div>
         </div>
         <NavItems />
